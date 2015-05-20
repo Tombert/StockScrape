@@ -45,7 +45,7 @@ main = do
          let urls = take 5 (map makeUrl symbols)
          responses <- mapConcurrently get urls
          --lah <- map (>>=) responses
-         mapM_ (print) responses 
+         mapM_ print responses 
          --respgonse <- het ("http://query.yahooapis.com/v1/public/yql?format=json&amp;q=" ++ (queries !! 0))
          --
          --putStrLn (queries !! 0) 
