@@ -1,5 +1,7 @@
 dist
 cabal-dev
+
+*.save0
 *.o
 *.hi
 *.chi
@@ -14,3 +16,10 @@ cabal.sandbox.config
 *.prof
 *.aux
 *.hp
+
+
+# Vim Stuff
+*.swp 
+*.swo
+
+
