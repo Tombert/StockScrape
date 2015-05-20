@@ -5,7 +5,7 @@ import Data.List.Split
 import Data.String
 import Network.HTTP
 import Text.JSON.Generic
-
+import Control.Concurrent.Async
 
 data Stock = Stock 
      {
@@ -42,10 +42,10 @@ main :: IO ()
 main = do 
          symbolsFile <- readFile "symbols.csv"
          let symbols = breakAndChunk symbolsFile
-         let urls = map makeUrl symbols
-         let responses = map get urls
+         let urls = take 5 (map makeUrl symbols)
+         responses <- mapConcurrently get urls
          --lah <- map (>>=) responses
-         mapM_ (>>=print) responses 
+         mapM_ (print) responses 
          --respgonse <- het ("http://query.yahooapis.com/v1/public/yql?format=json&amp;q=" ++ (queries !! 0))
          --
          --putStrLn (queries !! 0) 
