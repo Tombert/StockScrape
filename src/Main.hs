@@ -7,12 +7,63 @@ import Network.HTTP
 import Text.JSON.Generic
 import Control.Concurrent.Async
 
+
+(!&!) :: (JSON a) => JSObject JSValue -> String -> Result a
+(!&!) = flip valFromObj
+
+data QueryObj = QueryObj
+     {
+        query ::ResultsObj 
+     } deriving Show
+
+data ResultsObj = ResultsObj
+     {
+       results :: QuoteObj 
+     } deriving Show
+
+data QuoteObj = QuoteObj 
+     {
+       quote :: [Stock]
+     } deriving Show
+
 data Stock = Stock 
      {
-       symbol :: String,
-       daysHigh :: String,
-       daysLow  :: String
-     }
+       symbol :: String
+     } deriving Show
+
+instance JSON QueryObj where
+    -- Keep the compiler quiet
+    showJSON = undefined
+
+    readJSON (JSObject obj) =
+        QueryObj     <$>
+        obj !&! "query"
+
+instance JSON ResultsObj where
+    -- Keep the compiler quiet
+    showJSON = undefined
+
+    readJSON (JSObject obj) =
+        ResultsObj        <$>
+        obj !&! "results"
+
+instance JSON QuoteObj where 
+    showJSON = undefined
+    readJSON (JSObject obj) =
+      QuoteObj <$>
+      obj !&! "quote"
+
+instance JSON Stock where
+    -- Keep the compiler quiet
+    showJSON = undefined
+
+    readJSON (JSObject obj) =
+        Stock       <$>
+        obj !&! "symbol"
+    --readJSON _ = mzero
+
+
+
 
 
 quoteWrap x = "\"" ++ x ++ "\""
@@ -44,8 +95,9 @@ main = do
          let symbols = breakAndChunk symbolsFile
          let urls = take 5 (map makeUrl symbols)
          responses <- mapConcurrently get urls
+         let myObjects = map (\x -> decode x :: Result QueryObj) responses
          --lah <- map (>>=) responses
-         mapM_ print responses 
+         mapM_ print myObjects 
          --respgonse <- het ("http://query.yahooapis.com/v1/public/yql?format=json&amp;q=" ++ (queries !! 0))
          --
          --putStrLn (queries !! 0) 
