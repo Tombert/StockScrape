@@ -13,21 +13,28 @@ import Control.Concurrent.Async
 (!&!) :: (JSON a) => JSObject JSValue -> String -> Result a
 (!&!) = flip valFromObj
 
+-- I don't really like how this item looks, but it's just there to grab query
+-- item out of the json object
 data QueryObj = QueryObj
      {
         query ::ResultsObj 
      } deriving Show
 
+-- This grabs the result out of the JSON object. 
 data ResultsObj = ResultsObj
      {
        results :: QuoteObj 
      } deriving Show
 
+-- This grabs the quote out of the JSON object...Yahoo really does nest this data 
+-- way too much. 
 data QuoteObj = QuoteObj 
      {
        quote :: [Stock]
      } deriving Show
 
+-- Here's the meat of it all; this is a handle on the symbol and the daysHigh value 
+-- from the stock object.  
 data Stock = Stock 
      {
        sy :: String,
@@ -41,6 +48,9 @@ data Stock = Stock
 getStocks :: QueryObj ->[Stock]
 getStocks = quote . results . query 
 
+
+-- This is the first handle on the JSON, and it passes the processing
+-- off to results. 
 instance JSON QueryObj where
     -- Keep the compiler quiet
     showJSON = undefined
@@ -49,6 +59,7 @@ instance JSON QueryObj where
         QueryObj     <$>
         obj !&! "query"
 
+-- This  hands processing off to the Quote
 instance JSON ResultsObj where
     -- Keep the compiler quiet
     showJSON = undefined
@@ -57,12 +68,18 @@ instance JSON ResultsObj where
         ResultsObj        <$>
         obj !&! "results"
 
+
+-- This hands processing off to the Stock
 instance JSON QuoteObj where 
     showJSON = undefined
     readJSON (JSObject obj) =
       QuoteObj <$>
       obj !&! "quote"
 
+
+-- And this finally grabs values and places them into an object we can 
+-- use.  Once we have an object, it's relatively straightforward to make
+-- into a comma-separated list. 
 instance JSON Stock where
     -- Keep the compiler quiet
     showJSON = undefined
