@@ -8,7 +8,7 @@ cabal sandbox init
 cabal install --only-dependencies
 cabal build
 cabal run
- AMD,238 
+ AMD,2.38 
  ...
 ```
 
