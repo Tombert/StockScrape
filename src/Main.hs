@@ -31,6 +31,9 @@ data Stock = Stock
        symbol :: String
      } deriving Show
 
+getStocks :: QueryObj ->[Stock]
+getStocks = quote . results . query 
+
 instance JSON QueryObj where
     -- Keep the compiler quiet
     showJSON = undefined
@@ -89,13 +92,19 @@ concatFields x y = x ++ "," ++ y
 get :: String -> IO String
 get url = simpleHTTP (getRequest url) >>= getResponseBody
 
+removeResult :: Result a -> a
+removeResult (Ok x) = x
+removeResult (Error x) = error "Parse Error in JSON"
+
+getAllStocks = (map getStocks) . (map removeResult) . (map (\x -> decode x :: Result QueryObj))
+
 main :: IO ()
 main = do 
          symbolsFile <- readFile "symbols.csv"
          let symbols = breakAndChunk symbolsFile
          let urls = take 5 (map makeUrl symbols)
          responses <- mapConcurrently get urls
-         let myObjects = map (\x -> decode x :: Result QueryObj) responses
+         let myObjects = getAllStocks responses
          --lah <- map (>>=) responses
          mapM_ print myObjects 
          --respgonse <- het ("http://query.yahooapis.com/v1/public/yql?format=json&amp;q=" ++ (queries !! 0))
