@@ -114,7 +114,7 @@ removeJSValue (JSString x) = fromJSString x
 removeJSValue (JSNull) = "null"  
 
 --prettyPrintList :: [Stock] -> String
-prettyPrint = map (\x -> (concatFields (sy x) (removeJSValue (daysHigh x)) ++ "\n")) 
+prettyPrint = map (\x -> concatFields (sy x) (removeJSValue (daysHigh x))) 
 
 main :: IO ()
 main = do 
