@@ -160,4 +160,3 @@ main = do
          let myObjects = getAllStocks responses
          let yo = prettyPrint (concat myObjects)
          mapM_ putStrLn yo
-         --mapM_ print myObjects 
