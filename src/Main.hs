@@ -77,7 +77,7 @@ instance JSON Stock where
 
 quoteWrap x = "\"" ++ x ++ "\""
 
-breakAndChunk = (splitEvery 250) . (map quoteWrap) . lines
+breakAndChunk = (chunksOf 250) . (map quoteWrap) . lines
 
 
 commaList :: [String] -> String
@@ -107,13 +107,13 @@ removeResult :: Result a -> a
 removeResult (Ok x) = x
 removeResult (Error x) = error x 
 
-getAllStocks =  (map getStocks) . (map removeResult) . (map (\x -> decode x :: Result QueryObj))
 
-
+removeJSValue :: JSValue -> String
 removeJSValue (JSString x) = fromJSString x
 removeJSValue (JSNull) = "null"  
 
---prettyPrintList :: [Stock] -> String
+getAllStocks =  (map getStocks) . (map removeResult) . (map (\x -> decode x :: Result QueryObj))
+
 prettyPrint = map (\x -> concatFields (sy x) (removeJSValue (daysHigh x))) 
 
 main :: IO ()
