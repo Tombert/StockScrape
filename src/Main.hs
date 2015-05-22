@@ -112,6 +112,7 @@ commaList = tail . (foldl concatFields "")
 parenWrap :: String -> String
 parenWrap x = "(" ++ x ++ ")"
 
+queryBuilder :: String -> String
 queryBuilder x = "use \"http://github.com/spullara/yql-tables/raw/d60732fd4fbe72e5d5bd2994ff27cf58ba4d3f84/yahoo/finance/yahoo.finance.quotes.xml\" as quotes; select * from quotes where symbol in " ++ x
 
 
