@@ -77,7 +77,7 @@ instance JSON Stock where
 
 quoteWrap x = "\"" ++ x ++ "\""
 
-breakAndChunk = (chunksOf 250) . (map quoteWrap) . lines
+breakAndChunk = (chunksOf 1000) . (map quoteWrap) . lines
 
 
 commaList :: [String] -> String
