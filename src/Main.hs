@@ -151,8 +151,9 @@ removeJSValue :: JSValue -> String
 removeJSValue (JSString x) = fromJSString x
 removeJSValue (JSNull) = "null"  
 
+jsonToAllStocks = getStocks . removeResult . (\x -> decode x :: Result QueryObj)
 -- This is just a quick helper function to convert all the JSON into stocks
-getAllStocks =  (map getStocks) . (map removeResult) . (map (\x -> decode x :: Result QueryObj))
+getAllStocks =  map jsonToAllStocks
 
 prettyPrint = map (\x -> concatFields (sy x) (removeJSValue (daysHigh x))) 
 
