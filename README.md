@@ -13,6 +13,6 @@ cabal run
 ```
 
 ## Note
-I'm using Yahoo stocks to get the information, since their API is relatively straightforward, though I need to point out that there is a rate-limit imposed by Yahoo of 1000-requests per hour.  To help avoid this, I have batched-together 1000 stocks per-request (the current maximum). This brings everything down to around 20 requests, so this shouldn't be an issue unless you run this script ten times an hour.
+I'm using Yahoo stocks to get the information, since their API is relatively straightforward, though I need to point out that there is a rate-limit imposed by Yahoo of 1000-requests per hour.  To help avoid this, I have batched-together 1000 stocks per-request (the current maximum). This brings everything down to around 20 requests, so this shouldn't be an issue unless you run this script fifty times an hour.
 
 
