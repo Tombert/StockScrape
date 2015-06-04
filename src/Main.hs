@@ -149,7 +149,7 @@ removeResult (Error x) = error x
 -- type constructors and grab out the values. 
 removeJSValue :: JSValue -> String
 removeJSValue (JSString x) = fromJSString x
-removeJSValue (JSNull) = "null"  
+removeJSValue _ = "null"  
 
 jsonToAllStocks = getStocks . removeResult . (\x -> decode x :: Result QueryObj)
 -- This is just a quick helper function to convert all the JSON into stocks
