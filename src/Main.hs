@@ -101,7 +101,7 @@ instance JSON Stock where
 quoteWrap x = "\"" ++ x ++ "\""
 
 -- This is a quick composition to break up a file by newline, wrap it
--- in quotes, then break it up into 250 element chunks. 
+-- in quotes, then break it up into 1000 element chunks. 
 breakAndChunk = (chunksOf 1000) . (map quoteWrap) . lines
 
 
